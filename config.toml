@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "https://acacia-jieyicai-portfolio.netlify.app/"
 languageCode = "en-us"
-title = "Website for Acacia"
+title = "Acacia's Website"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
@@ -20,7 +20,7 @@ disqusShortname = ""
 
   # Provide your metadata here.
   name = "Acacia Cai"
-  description = "Your description"
+  description = "Data-driven Changemaker"
 
   # Link custom assets relative to /static
   custom_css = []
@@ -38,8 +38,8 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "Acacia"
-    #subtitle = "By HTML5 Up"
-    menu = "Menu"
+    subtitle = "Portforlio"
+    menu = "Start to Know Me"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
 
