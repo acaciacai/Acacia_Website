@@ -8,11 +8,11 @@ draft: false
 image: pic07.jpg
 keywords: ""
 slug: project1
-title: Explore IMDB Dataset - 1
+title: Explore IMDB Dataset - 2
 ---
 
-<script src="project1_files/kePrint/kePrint.js"></script>
-<link href="project1_files/lightable/lightable.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
 
 
 <div id="background" class="section level1">
@@ -243,7 +243,7 @@ movies_by_genre %&gt;%
        x = &quot;genre&quot;,
        y = &quot;number of movies&quot;)+
   theme_classic()</code></pre>
-<p><img src="project1_files/figure-html/question2-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="/projects/project1_files/figure-html/question2-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="which-kind-of-movies-is-the-most-profitable" class="section level2">
 <h2>Which kind of movies is the most profitable?</h2>
@@ -908,7 +908,7 @@ ggplot(movies, aes(x = rating, group = genre)) +
   labs(title = &quot;Density distribution of ratings by genre&quot;, x = &quot;Rating&quot;, y = &quot;Density&quot;) +
   facet_wrap(~genre) + # split them into different plot based on genre
   theme_clean()</code></pre>
-<p><img src="project1_files/figure-html/question6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/projects/project1_files/figure-html/question6-1.png" width="648" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>It is interesting to notice that while horror movies were the most profitable ones, they are also the most disliked movies (after the thriller movie which represents an unsignificant sample). Conversely, Biography movies are the most liked ones and are also very profitable. Perhaps movies are a great source of inspiration, and while there is no dearth of good fictional movies, what really inspires people are biographies.</p>
 </blockquote>
@@ -1139,7 +1139,7 @@ Francis Lawrence
   scale_y_continuous(labels = scales::comma) +
   scale_x_continuous(labels = scales::comma) +
   theme_clean()</code></pre>
-<p><img src="project1_files/figure-html/gross_on_fblikes-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/projects/project1_files/figure-html/gross_on_fblikes-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Correlation coefficient
 movies %&gt;%
   summarize(correlation = cor(cast_facebook_likes,gross)^2)</code></pre>
@@ -1160,7 +1160,7 @@ movies %&gt;%
   scale_y_continuous(labels = scales::dollar) +
   scale_x_continuous(labels = scales::dollar) +
   theme_clean()</code></pre>
-<p><img src="project1_files/figure-html/gross_on_budget-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/projects/project1_files/figure-html/gross_on_budget-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Correlation coefficient
 movies %&gt;%
   summarize(correlation = cor(budget,gross)^2)</code></pre>
@@ -1182,7 +1182,7 @@ movies %&gt;%
   scale_y_continuous(labels = scales::dollar) +
   scale_x_continuous() +
   theme_clean()</code></pre>
-<p><img src="project1_files/figure-html/gross_on_rating-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="/projects/project1_files/figure-html/gross_on_rating-1.png" width="960" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>The data indicates that a higher IMDB rating is a somewhat indicator for higher gross sales in the categories of action, adventure, animation, biography and drama. This may likely be due to higher budget requirements in terms of cast, special effects and post production. As the general trajectory that can be observed in relatively flat across the other categories, IMDB rating is only (if at all) a limited factor in explaining variance in gross sales. Furthermore, the dataset might be missing information for movies in the categories musical, romance, thriller and western. Hence, it is not possible to infer any conclusion on the correlation between IMDB Rating and gross sales for those categories.</p>
 </blockquote>
