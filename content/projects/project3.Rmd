@@ -1,0 +1,186 @@
+---
+categories:
+- ""
+- ""
+date: '2020-09-20'
+description: 'IMDB ratings: Differences between directors'
+draft: false
+image: pic0202.jpg
+keywords: ""
+slug: project3
+title: Explore IMDB Dataset - 2
+---
+
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(infer)
+library(gt)
+```
+
+```{r load-movies-data, echo=FALSE}
+movies <- read_csv(here::here("data", "movies.csv"))
+```
+
+```{r glimpse_skim_data2, echo=FALSE, include = FALSE}
+
+# Checking for missing values
+anyNA(movies)
+
+# Checking if there are duplicates based on title, director, year, duration
+dupes <- movies %>%
+  select(title, director, year, duration) %>%
+  duplicated()
+
+#check the number of duplcate rows
+table(dupes)["TRUE"]
+
+#get the clean dataset
+movies_cleaned <- movies[!dupes,]
+
+```
+
+# Background
+
+IMDb is an online database, owned by Amazon, of information related to films, television programs, home videos, video games, and streaming content online – including cast, production crew and personal biographies, plot summaries, trivia, ratings, and fan and critical reviews.
+
+In the previous project, we did the **Exploratory Data Analysis** on [Kaggle IMDB 5000 movie dataset](https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset). And today, we are going to dig deeper into it.
+
+
+# Review of Previous Project
+
+Do you remember one of our findings is Top 10 directors?
+
+```{r, question4}
+top_directors <- movies_cleaned %>%
+  group_by(director) %>%
+  summarize(
+    total = sum(gross)/1000000, mean = mean(gross)/1000000,
+    median = median(gross)/1000000, st_dev=sd(gross)/1000000) %>%
+  arrange(desc(total)) %>%
+  head(10)
+
+top_directors %>% 
+  gt() %>% 
+  tab_header(title = md("Top 10 Directors - Movies Financial Data (Million)")) %>% 
+  fmt_currency(columns = vars(total, mean, median, st_dev),
+               currency = "USD")
+```
+
+Today, I am going to explore whether the mean IMDB rating for **Steven Spielberg** and **Tim Burton** are the same or not. 
+
+
+# Confidence intervals for the mean ratings of these two directors
+
+```{r, fig.width=10, fig.height=8}
+selected_directors <- movies %>%
+  select(director, rating) %>%
+  filter(director == "Steven Spielberg" | director == "Tim Burton") %>%
+  group_by(director) %>%
+  summarize(avg = mean(rating), 
+            sd = sd(rating), 
+            count = n(),
+            tstat = qt(0.975, count-1),
+            se = sd/sqrt(count),
+            lower_ci = avg - tstat*se, 
+            upper_ci = avg + tstat*se) 
+
+selected_directors %>% 
+  gt()
+
+ggplot(selected_directors, aes(x = avg, y = reorder(director, avg), color = director)) +
+  geom_errorbar(aes(xmin = lower_ci, xmax = upper_ci), width = 0.1) +
+  labs(title = "Do Spielberg and Burton have the same IMDB Ratings?",
+       subtitle = "95% confidence intervals overlap",
+       x = "Mean IMDB Rating", y = "") +
+  geom_text(aes(label=round(lower_ci,2)), vjust=-1.5,hjust=3,angle=0, color="black", size=8) +
+  geom_text(aes(label=round(upper_ci,2)), vjust=-1.5,hjust=-2,angle=0, color="black", size=8) +
+  geom_text(aes(label=round(avg,2)), vjust=-2, colour= "black", size= 15)+
+  geom_point() +
+  theme(legend.position = "none") +
+  annotate("rect", fill = "grey", alpha = 0.5, xmin=7.27, xmax= 7.33, ymin=-Inf, ymax = Inf)
+
+```
+
+> From the plot, we could see that 95% confidence intervals overlap. Hence, we couldn't say that they have different rating scores. What we will do next is to run a hypothesis test and decide whether to reject the null hypothesis or not.
+
+
+# Hypothesis test
+
+There are two ways to run the hypothesis test:
+
+- Hypothesis test with formula: calculate of t-statistic and p-value using formula.
+ 
+    *t-stat = (observe - assume)/SE*
+
+- Hypothesis test using 'infer' package
+
+
+## Hypothesis test with formula
+
+> The null hypothesis: Mean IMDB Ratings for Steven Spielberg and Tim Burton are the same.
+The alternative hypothesis: Mean IMDB Ratings for Steven Spielberg and Tim Burton are *NOT* the same
+
+```{r}
+Testing_null <- movies %>%
+  select(director, rating) %>%
+  filter(director == "Steven Spielberg" | director == "Tim Burton")
+
+t.test(rating ~ director, data =Testing_null)
+```
+
+> According to the p-value found (p-value = 0.01) which is less than 0.05, hence we reject the null hypothesis. Therefore assume that the average IMDB Ratings for Steven Spielberg and Tim Burton are not the same.
+
+
+## Hypothesis test with `infer`
+
+```{r}
+#Initialize the test
+init_rating_null<- Testing_null%>%
+specify(rating ~ director)%>%
+  
+calculate(stat="diff in means",order=c("Steven Spielberg","Tim Burton")) 
+
+#Simulate the test on the null distribution, which we will save as null
+ratings_null_world<-Testing_null%>%
+specify(rating ~ director)%>%
+hypothesize(null="independence")%>%
+generate(reps=1000,type="permute")%>%
+  
+calculate(stat="diff in means",order=c("Steven Spielberg","Tim Burton"))
+
+#Visualize the null distribution and get the p value
+ratings_null_world %>% 
+visualize() +
+  shade_p_value(obs_stat = init_rating_null, direction = "two-sided") 
+ratings_null_world %>% get_p_value(obs_stat = init_rating_null, direction = "two_sided")
+```
+
+> According to the p-value found (p-value = 0.008) which is less than 0.05, hence we reject the null hypothesis. Therefore assume that the average IMDB Ratings for Steven Spielberg and Tim Burton are not the same.
+
+
+# Details and Resources
+
+Adapted from: *Assignment from [Applied Statistics with R](https://mam2021.netlify.app/), London Business School*
+
+Course Instructor: *[Kostis Christodoulou](https://www.london.edu/faculty-and-research/faculty-profiles/k/kostis-christodoulou)*
+
+Original assignment collaborated with: *Ken Dobson, Othman Bensouda, Carlota Castro Perez, Fabian Sinn, Lucksika Chaikul*

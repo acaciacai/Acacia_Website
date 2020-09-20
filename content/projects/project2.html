@@ -1,0 +1,945 @@
+---
+categories:
+- ""
+- ""
+date: '2020-09-20'
+description: 'IMDB ratings: Differences between directors'
+draft: false
+image: pic02.jpg
+keywords: ""
+slug: project2
+title: Explore IMDB Dataset - 2
+---
+
+
+
+<div id="background" class="section level1">
+<h1>Background</h1>
+<p>IMDb is an online database, owned by Amazon, of information related to films, television programs, home videos, video games, and streaming content online – including cast, production crew and personal biographies, plot summaries, trivia, ratings, and fan and critical reviews.</p>
+<p>In the previous project, we did the <strong>Exploratory Data Analysis</strong> on <a href="https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset">Kaggle IMDB 5000 movie dataset</a>. And today, we are going to dig deeper into it.</p>
+</div>
+<div id="review-of-previous-project" class="section level1">
+<h1>Review of Previous Project</h1>
+<p>Do you remember one of our findings is Top 10 directors?</p>
+<pre class="r"><code>top_directors &lt;- movies_cleaned %&gt;%
+  group_by(director) %&gt;%
+  summarize(
+    total = sum(gross)/1000000, mean = mean(gross)/1000000,
+    median = median(gross)/1000000, st_dev=sd(gross)/1000000) %&gt;%
+  arrange(desc(total)) %&gt;%
+  head(10)
+
+top_directors %&gt;% 
+  gt() %&gt;% 
+  tab_header(title = md(&quot;Top 10 Directors - Movies Financial Data (Million)&quot;)) %&gt;% 
+  fmt_currency(columns = vars(total, mean, median, st_dev),
+               currency = &quot;USD&quot;)</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#yaxsnsjgnf .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#yaxsnsjgnf .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#yaxsnsjgnf .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#yaxsnsjgnf .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#yaxsnsjgnf .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#yaxsnsjgnf .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#yaxsnsjgnf .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#yaxsnsjgnf .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yaxsnsjgnf .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yaxsnsjgnf .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#yaxsnsjgnf .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#yaxsnsjgnf .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#yaxsnsjgnf .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#yaxsnsjgnf .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaxsnsjgnf .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaxsnsjgnf .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#yaxsnsjgnf .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#yaxsnsjgnf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yaxsnsjgnf .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#yaxsnsjgnf .gt_left {
+  text-align: left;
+}
+
+#yaxsnsjgnf .gt_center {
+  text-align: center;
+}
+
+#yaxsnsjgnf .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#yaxsnsjgnf .gt_font_normal {
+  font-weight: normal;
+}
+
+#yaxsnsjgnf .gt_font_bold {
+  font-weight: bold;
+}
+
+#yaxsnsjgnf .gt_font_italic {
+  font-style: italic;
+}
+
+#yaxsnsjgnf .gt_super {
+  font-size: 65%;
+}
+
+#yaxsnsjgnf .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="yaxsnsjgnf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="5" class="gt_heading gt_title gt_font_normal" style>Top 10 Directors - Movies Financial Data (Million)</th>
+    </tr>
+    <tr>
+      <th colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">director</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">total</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mean</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">median</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">st_dev</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">Steven Spielberg</td>
+      <td class="gt_row gt_right">$4,014.06</td>
+      <td class="gt_row gt_right">$174.52</td>
+      <td class="gt_row gt_right">$164.44</td>
+      <td class="gt_row gt_right">$101.42</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Michael Bay</td>
+      <td class="gt_row gt_right">$2,195.44</td>
+      <td class="gt_row gt_right">$182.95</td>
+      <td class="gt_row gt_right">$168.47</td>
+      <td class="gt_row gt_right">$125.79</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">James Cameron</td>
+      <td class="gt_row gt_right">$1,909.73</td>
+      <td class="gt_row gt_right">$318.29</td>
+      <td class="gt_row gt_right">$175.56</td>
+      <td class="gt_row gt_right">$309.17</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Christopher Nolan</td>
+      <td class="gt_row gt_right">$1,813.23</td>
+      <td class="gt_row gt_right">$226.65</td>
+      <td class="gt_row gt_right">$196.67</td>
+      <td class="gt_row gt_right">$187.22</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">George Lucas</td>
+      <td class="gt_row gt_right">$1,741.42</td>
+      <td class="gt_row gt_right">$348.28</td>
+      <td class="gt_row gt_right">$380.26</td>
+      <td class="gt_row gt_right">$146.19</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Robert Zemeckis</td>
+      <td class="gt_row gt_right">$1,619.31</td>
+      <td class="gt_row gt_right">$124.56</td>
+      <td class="gt_row gt_right">$100.85</td>
+      <td class="gt_row gt_right">$91.30</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Tim Burton</td>
+      <td class="gt_row gt_right">$1,557.08</td>
+      <td class="gt_row gt_right">$111.22</td>
+      <td class="gt_row gt_right">$69.79</td>
+      <td class="gt_row gt_right">$99.30</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Sam Raimi</td>
+      <td class="gt_row gt_right">$1,443.17</td>
+      <td class="gt_row gt_right">$180.40</td>
+      <td class="gt_row gt_right">$138.48</td>
+      <td class="gt_row gt_right">$174.71</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Clint Eastwood</td>
+      <td class="gt_row gt_right">$1,378.32</td>
+      <td class="gt_row gt_right">$72.54</td>
+      <td class="gt_row gt_right">$46.70</td>
+      <td class="gt_row gt_right">$75.49</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Francis Lawrence</td>
+      <td class="gt_row gt_right">$1,358.50</td>
+      <td class="gt_row gt_right">$271.70</td>
+      <td class="gt_row gt_right">$281.67</td>
+      <td class="gt_row gt_right">$135.44</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<p>Today, I am going to explore whether the mean IMDB rating for <strong>Steven Spielberg</strong> and <strong>Tim Burton</strong> are the same or not.</p>
+</div>
+<div id="confidence-intervals-for-the-mean-ratings-of-these-two-directors" class="section level1">
+<h1>Confidence intervals for the mean ratings of these two directors</h1>
+<pre class="r"><code>selected_directors &lt;- movies %&gt;%
+  select(director, rating) %&gt;%
+  filter(director == &quot;Steven Spielberg&quot; | director == &quot;Tim Burton&quot;) %&gt;%
+  group_by(director) %&gt;%
+  summarize(avg = mean(rating), 
+            sd = sd(rating), 
+            count = n(),
+            tstat = qt(0.975, count-1),
+            se = sd/sqrt(count),
+            lower_ci = avg - tstat*se, 
+            upper_ci = avg + tstat*se) 
+
+selected_directors %&gt;% 
+  gt()</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#cmwtwylukt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#cmwtwylukt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#cmwtwylukt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#cmwtwylukt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#cmwtwylukt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#cmwtwylukt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#cmwtwylukt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#cmwtwylukt .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cmwtwylukt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cmwtwylukt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#cmwtwylukt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#cmwtwylukt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#cmwtwylukt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#cmwtwylukt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cmwtwylukt .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cmwtwylukt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#cmwtwylukt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#cmwtwylukt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cmwtwylukt .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#cmwtwylukt .gt_left {
+  text-align: left;
+}
+
+#cmwtwylukt .gt_center {
+  text-align: center;
+}
+
+#cmwtwylukt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#cmwtwylukt .gt_font_normal {
+  font-weight: normal;
+}
+
+#cmwtwylukt .gt_font_bold {
+  font-weight: bold;
+}
+
+#cmwtwylukt .gt_font_italic {
+  font-style: italic;
+}
+
+#cmwtwylukt .gt_super {
+  font-size: 65%;
+}
+
+#cmwtwylukt .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="cmwtwylukt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">director</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">avg</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">sd</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">count</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">tstat</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">se</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">lower_ci</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">upper_ci</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">Steven Spielberg</td>
+      <td class="gt_row gt_right">7.57</td>
+      <td class="gt_row gt_right">0.695</td>
+      <td class="gt_row gt_center">23</td>
+      <td class="gt_row gt_right">2.07</td>
+      <td class="gt_row gt_right">0.145</td>
+      <td class="gt_row gt_right">7.27</td>
+      <td class="gt_row gt_right">7.87</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Tim Burton</td>
+      <td class="gt_row gt_right">6.93</td>
+      <td class="gt_row gt_right">0.749</td>
+      <td class="gt_row gt_center">16</td>
+      <td class="gt_row gt_right">2.13</td>
+      <td class="gt_row gt_right">0.187</td>
+      <td class="gt_row gt_right">6.53</td>
+      <td class="gt_row gt_right">7.33</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<pre class="r"><code>ggplot(selected_directors, aes(x = avg, y = reorder(director, avg), color = director)) +
+  geom_errorbar(aes(xmin = lower_ci, xmax = upper_ci), width = 0.1) +
+  labs(title = &quot;Do Spielberg and Burton have the same IMDB Ratings?&quot;,
+       subtitle = &quot;95% confidence intervals overlap&quot;,
+       x = &quot;Mean IMDB Rating&quot;, y = &quot;&quot;) +
+  geom_text(aes(label=round(lower_ci,2)), vjust=-1.5,hjust=3,angle=0, color=&quot;black&quot;, size=8) +
+  geom_text(aes(label=round(upper_ci,2)), vjust=-1.5,hjust=-2,angle=0, color=&quot;black&quot;, size=8) +
+  geom_text(aes(label=round(avg,2)), vjust=-2, colour= &quot;black&quot;, size= 15)+
+  geom_point() +
+  theme(legend.position = &quot;none&quot;) +
+  annotate(&quot;rect&quot;, fill = &quot;grey&quot;, alpha = 0.5, xmin=7.27, xmax= 7.33, ymin=-Inf, ymax = Inf)</code></pre>
+<p><img src="/projects/project2_files/figure-html/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>From the plot, we could see that 95% confidence intervals overlap. Hence, we couldn’t say that they have different rating scores. What we will do next is to run a hypothesis test and decide whether to reject the null hypothesis or not.</p>
+</blockquote>
+</div>
+<div id="hypothesis-test" class="section level1">
+<h1>Hypothesis test</h1>
+<p>There are two ways to run the hypothesis test:</p>
+<ul>
+<li><p>Hypothesis test with formula: calculate of t-statistic and p-value using formula.</p>
+<p><em>t-stat = (observe - assume)/SE</em></p></li>
+<li><p>Hypothesis test using ‘infer’ package</p></li>
+</ul>
+<div id="hypothesis-test-with-formula" class="section level2">
+<h2>Hypothesis test with formula</h2>
+<blockquote>
+<p>The null hypothesis: Mean IMDB Ratings for Steven Spielberg and Tim Burton are the same.
+The alternative hypothesis: Mean IMDB Ratings for Steven Spielberg and Tim Burton are <em>NOT</em> the same</p>
+</blockquote>
+<pre class="r"><code>Testing_null &lt;- movies %&gt;%
+  select(director, rating) %&gt;%
+  filter(director == &quot;Steven Spielberg&quot; | director == &quot;Tim Burton&quot;)
+
+t.test(rating ~ director, data =Testing_null)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  rating by director
+## t = 3, df = 31, p-value = 0.01
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.16 1.13
+## sample estimates:
+## mean in group Steven Spielberg       mean in group Tim Burton 
+##                           7.57                           6.93</code></pre>
+<blockquote>
+<p>According to the p-value found (p-value = 0.01) which is less than 0.05, hence we reject the null hypothesis. Therefore assume that the average IMDB Ratings for Steven Spielberg and Tim Burton are not the same.</p>
+</blockquote>
+</div>
+<div id="hypothesis-test-with-infer" class="section level2">
+<h2>Hypothesis test with <code>infer</code></h2>
+<pre class="r"><code>#Initialize the test
+init_rating_null&lt;- Testing_null%&gt;%
+specify(rating ~ director)%&gt;%
+  
+calculate(stat=&quot;diff in means&quot;,order=c(&quot;Steven Spielberg&quot;,&quot;Tim Burton&quot;)) 
+
+#Simulate the test on the null distribution, which we will save as null
+ratings_null_world&lt;-Testing_null%&gt;%
+specify(rating ~ director)%&gt;%
+hypothesize(null=&quot;independence&quot;)%&gt;%
+generate(reps=1000,type=&quot;permute&quot;)%&gt;%
+  
+calculate(stat=&quot;diff in means&quot;,order=c(&quot;Steven Spielberg&quot;,&quot;Tim Burton&quot;))
+
+#Visualize the null distribution and get the p value
+ratings_null_world %&gt;% 
+visualize() +
+  shade_p_value(obs_stat = init_rating_null, direction = &quot;two-sided&quot;) </code></pre>
+<p><img src="/projects/project2_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ratings_null_world %&gt;% get_p_value(obs_stat = init_rating_null, direction = &quot;two_sided&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.004</code></pre>
+<blockquote>
+<p>According to the p-value found (p-value = 0.008) which is less than 0.05, hence we reject the null hypothesis. Therefore assume that the average IMDB Ratings for Steven Spielberg and Tim Burton are not the same.</p>
+</blockquote>
+</div>
+</div>
+<div id="details-and-resources" class="section level1">
+<h1>Details and Resources</h1>
+<p>Adapted from: <em>Assignment from <a href="https://mam2021.netlify.app/">Applied Statistics with R</a>, London Business School</em></p>
+<p>Course Instructor: <em><a href="https://www.london.edu/faculty-and-research/faculty-profiles/k/kostis-christodoulou">Kostis Christodoulou</a></em></p>
+<p>Original assignment collaborated with: <em>Ken Dobson, Othman Bensouda, Carlota Castro Perez, Fabian Sinn, Lucksika Chaikul</em></p>
+</div>
