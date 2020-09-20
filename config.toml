@@ -100,8 +100,8 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Explore IMDB Dataset - 2"
       subtitle = "IMDB ratings: Differences between directors"
-      image = "projects/pic02.jpg"
-      url = "projects/project2"
+      image = "projects/pic02.jpeg"
+      url = "projects/project3"
 
     [[params.tiles.showcase]]
       title = "Magna"
