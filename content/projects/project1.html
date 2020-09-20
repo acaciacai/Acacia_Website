@@ -8,11 +8,9 @@ draft: false
 image: pic07.jpg
 keywords: ""
 slug: project1
-title: Explore IMDB Dataset - 2
+title: Explore IMDB Dataset - 1
 ---
 
-<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
-<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
 
 
 <div id="background" class="section level1">
@@ -39,7 +37,7 @@ title: Explore IMDB Dataset - 2
 <pre class="r"><code>library(tidyverse)# Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
-library(kableExtra)# show the result in table format</code></pre>
+library(gt)# show the result in table format</code></pre>
 </div>
 <div id="import-data" class="section level1">
 <h1>Import data</h1>
@@ -79,161 +77,28 @@ movies_by_genre &lt;- movies_cleaned %&gt;%
   group_by(genre) %&gt;%
   count(sort = TRUE)
 
-# show the result in table
-movies_by_genre %&gt;%
-  kbl(col.names = c(&quot;Genre&quot;, &quot;Movie count&quot;)) %&gt;%
-  kable_material(c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
-  kable_styling(fixed_thead = T)</code></pre>
-<table class=" lightable-material lightable-striped lightable-hover table" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;'>
-<thead>
-<tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Genre
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Movie count
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Comedy
-</td>
-<td style="text-align:right;">
-844
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Action
-</td>
-<td style="text-align:right;">
-719
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Drama
-</td>
-<td style="text-align:right;">
-484
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Adventure
-</td>
-<td style="text-align:right;">
-281
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Crime
-</td>
-<td style="text-align:right;">
-198
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Biography
-</td>
-<td style="text-align:right;">
-135
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Horror
-</td>
-<td style="text-align:right;">
-128
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Animation
-</td>
-<td style="text-align:right;">
-35
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Fantasy
-</td>
-<td style="text-align:right;">
-26
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Documentary
-</td>
-<td style="text-align:right;">
-25
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Mystery
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sci-Fi
-</td>
-<td style="text-align:right;">
-7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Musical
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Romance
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Western
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thriller
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
-</table>
+movies_by_genre</code></pre>
+<pre><code>## # A tibble: 17 x 2
+## # Groups:   genre [17]
+##    genre           n
+##    &lt;chr&gt;       &lt;int&gt;
+##  1 Comedy        844
+##  2 Action        719
+##  3 Drama         484
+##  4 Adventure     281
+##  5 Crime         198
+##  6 Biography     135
+##  7 Horror        128
+##  8 Animation      35
+##  9 Fantasy        26
+## 10 Documentary    25
+## 11 Mystery        15
+## 12 Sci-Fi          7
+## 13 Family          3
+## 14 Musical         2
+## 15 Romance         2
+## 16 Western         2
+## 17 Thriller        1</code></pre>
 <p>From the table, we could know that in this dataset, we have the most comedy movies and the least thriller movies. We could also show the data in a plot format.</p>
 <pre class="r"><code># count the number of movies using group_by function
 movies_by_genre %&gt;%   
@@ -257,267 +122,470 @@ movies_by_genre %&gt;%
 
 # use the table format to present them
 genre_gross_budget %&gt;% 
-  kbl(col.names = c(&quot;Genre&quot;, &quot;Mean Gross (mm)&quot;, &quot;Mean Budget (mm)&quot;, &quot;Mean Return&quot;), digits = 2) %&gt;%
-  kable_material(c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
-  kable_styling(fixed_thead = T)</code></pre>
-<table class=" lightable-material lightable-striped lightable-hover table" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;'>
-<thead>
-<tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Genre
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Mean Gross (mm)
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Mean Budget (mm)
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Mean Return
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Horror
-</td>
-<td style="text-align:right;">
-37.8
-</td>
-<td style="text-align:right;">
-13.80
-</td>
-<td style="text-align:right;">
-86.15
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Biography
-</td>
-<td style="text-align:right;">
-45.2
-</td>
-<td style="text-align:right;">
-28.54
-</td>
-<td style="text-align:right;">
-22.28
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Musical
-</td>
-<td style="text-align:right;">
-92.1
-</td>
-<td style="text-align:right;">
-3.19
-</td>
-<td style="text-align:right;">
-18.82
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:right;">
-149.2
-</td>
-<td style="text-align:right;">
-14.83
-</td>
-<td style="text-align:right;">
-14.08
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Documentary
-</td>
-<td style="text-align:right;">
-17.4
-</td>
-<td style="text-align:right;">
-5.89
-</td>
-<td style="text-align:right;">
-8.70
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Western
-</td>
-<td style="text-align:right;">
-20.8
-</td>
-<td style="text-align:right;">
-3.46
-</td>
-<td style="text-align:right;">
-7.06
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Fantasy
-</td>
-<td style="text-align:right;">
-41.9
-</td>
-<td style="text-align:right;">
-18.48
-</td>
-<td style="text-align:right;">
-6.10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Animation
-</td>
-<td style="text-align:right;">
-98.4
-</td>
-<td style="text-align:right;">
-61.70
-</td>
-<td style="text-align:right;">
-5.01
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Comedy
-</td>
-<td style="text-align:right;">
-42.5
-</td>
-<td style="text-align:right;">
-24.46
-</td>
-<td style="text-align:right;">
-3.70
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Romance
-</td>
-<td style="text-align:right;">
-31.3
-</td>
-<td style="text-align:right;">
-25.11
-</td>
-<td style="text-align:right;">
-3.17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Drama
-</td>
-<td style="text-align:right;">
-36.8
-</td>
-<td style="text-align:right;">
-25.83
-</td>
-<td style="text-align:right;">
-2.98
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Mystery
-</td>
-<td style="text-align:right;">
-69.1
-</td>
-<td style="text-align:right;">
-41.50
-</td>
-<td style="text-align:right;">
-2.90
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Adventure
-</td>
-<td style="text-align:right;">
-94.3
-</td>
-<td style="text-align:right;">
-64.69
-</td>
-<td style="text-align:right;">
-2.44
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Crime
-</td>
-<td style="text-align:right;">
-37.6
-</td>
-<td style="text-align:right;">
-26.53
-</td>
-<td style="text-align:right;">
-2.19
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Action
-</td>
-<td style="text-align:right;">
-86.3
-</td>
-<td style="text-align:right;">
-70.77
-</td>
-<td style="text-align:right;">
-1.93
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sci-Fi
-</td>
-<td style="text-align:right;">
-29.8
-</td>
-<td style="text-align:right;">
-27.61
-</td>
-<td style="text-align:right;">
-1.58
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thriller
-</td>
-<td style="text-align:right;">
-0.0
-</td>
-<td style="text-align:right;">
-0.30
-</td>
-<td style="text-align:right;">
-0.01
-</td>
-</tr>
-</tbody>
-</table>
+  gt() %&gt;% 
+  tab_header(title = md(&quot;Movies Financial Data by Genre (Million)&quot;)) %&gt;% 
+  fmt_currency(columns = vars(mean_gross, mean_budget, mean_return),
+               currency = &quot;USD&quot;)</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#ekqiaqsrpb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ekqiaqsrpb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ekqiaqsrpb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ekqiaqsrpb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ekqiaqsrpb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ekqiaqsrpb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ekqiaqsrpb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ekqiaqsrpb .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ekqiaqsrpb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ekqiaqsrpb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ekqiaqsrpb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ekqiaqsrpb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ekqiaqsrpb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#ekqiaqsrpb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ekqiaqsrpb .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ekqiaqsrpb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ekqiaqsrpb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#ekqiaqsrpb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ekqiaqsrpb .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#ekqiaqsrpb .gt_left {
+  text-align: left;
+}
+
+#ekqiaqsrpb .gt_center {
+  text-align: center;
+}
+
+#ekqiaqsrpb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ekqiaqsrpb .gt_font_normal {
+  font-weight: normal;
+}
+
+#ekqiaqsrpb .gt_font_bold {
+  font-weight: bold;
+}
+
+#ekqiaqsrpb .gt_font_italic {
+  font-style: italic;
+}
+
+#ekqiaqsrpb .gt_super {
+  font-size: 65%;
+}
+
+#ekqiaqsrpb .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="ekqiaqsrpb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Movies Financial Data by Genre (Million)</th>
+    </tr>
+    <tr>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">genre</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mean_gross</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mean_budget</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mean_return</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">Horror</td>
+      <td class="gt_row gt_right">$37.78</td>
+      <td class="gt_row gt_right">$13.80</td>
+      <td class="gt_row gt_right">$86.15</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Biography</td>
+      <td class="gt_row gt_right">$45.20</td>
+      <td class="gt_row gt_right">$28.54</td>
+      <td class="gt_row gt_right">$22.28</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Musical</td>
+      <td class="gt_row gt_right">$92.08</td>
+      <td class="gt_row gt_right">$3.19</td>
+      <td class="gt_row gt_right">$18.82</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Family</td>
+      <td class="gt_row gt_right">$149.16</td>
+      <td class="gt_row gt_right">$14.83</td>
+      <td class="gt_row gt_right">$14.08</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Documentary</td>
+      <td class="gt_row gt_right">$17.35</td>
+      <td class="gt_row gt_right">$5.89</td>
+      <td class="gt_row gt_right">$8.70</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Western</td>
+      <td class="gt_row gt_right">$20.82</td>
+      <td class="gt_row gt_right">$3.46</td>
+      <td class="gt_row gt_right">$7.06</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Fantasy</td>
+      <td class="gt_row gt_right">$41.90</td>
+      <td class="gt_row gt_right">$18.48</td>
+      <td class="gt_row gt_right">$6.10</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Animation</td>
+      <td class="gt_row gt_right">$98.43</td>
+      <td class="gt_row gt_right">$61.70</td>
+      <td class="gt_row gt_right">$5.01</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Comedy</td>
+      <td class="gt_row gt_right">$42.49</td>
+      <td class="gt_row gt_right">$24.46</td>
+      <td class="gt_row gt_right">$3.70</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Romance</td>
+      <td class="gt_row gt_right">$31.26</td>
+      <td class="gt_row gt_right">$25.11</td>
+      <td class="gt_row gt_right">$3.17</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Drama</td>
+      <td class="gt_row gt_right">$36.75</td>
+      <td class="gt_row gt_right">$25.83</td>
+      <td class="gt_row gt_right">$2.98</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Mystery</td>
+      <td class="gt_row gt_right">$69.12</td>
+      <td class="gt_row gt_right">$41.50</td>
+      <td class="gt_row gt_right">$2.90</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Adventure</td>
+      <td class="gt_row gt_right">$94.35</td>
+      <td class="gt_row gt_right">$64.69</td>
+      <td class="gt_row gt_right">$2.44</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Crime</td>
+      <td class="gt_row gt_right">$37.60</td>
+      <td class="gt_row gt_right">$26.53</td>
+      <td class="gt_row gt_right">$2.19</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Action</td>
+      <td class="gt_row gt_right">$86.27</td>
+      <td class="gt_row gt_right">$70.77</td>
+      <td class="gt_row gt_right">$1.93</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Sci-Fi</td>
+      <td class="gt_row gt_right">$29.79</td>
+      <td class="gt_row gt_right">$27.61</td>
+      <td class="gt_row gt_right">$1.58</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Thriller</td>
+      <td class="gt_row gt_right">$0.00</td>
+      <td class="gt_row gt_right">$0.30</td>
+      <td class="gt_row gt_right">$0.01</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
 <blockquote>
 <p>This table shows that the most profitable movies are by far horror movies. This genre could be considered as an outlier since it is on average 4 times more profitable than the second on the list, which is Biography. Conversely, the least profitable genre is “Thriller” and it is unexpectedly low. However, it would not be relevant to assert that it is not a profitable genre, since there is only 1 thriller movie in our data frame. As a rule of thumb, we could assume that it would be difficult to conclude without a significant sample size of at least n=30 movies. Hence, we will not comment on which genre is the least profitable one, but it is fair to conclude that horror movies are indeed very profitable.</p>
 </blockquote>
@@ -532,376 +600,497 @@ genre_ratings &lt;- movies_cleaned %&gt;%
             st_dev=sd(rating)) 
 
 genre_ratings %&gt;%
-  kbl(col.names = gsub(&quot;[_]&quot;, &quot; &quot;, names(genre_ratings))) %&gt;%
-  kable_material(c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
-  kable_styling(fixed_thead = T)</code></pre>
-<table class=" lightable-material lightable-striped lightable-hover table" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;'>
-<thead>
-<tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-genre
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Minimum Rating
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Max Rating
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Mean Rating
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Median Rating
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-st dev
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Action
-</td>
-<td style="text-align:right;">
-2.1
-</td>
-<td style="text-align:right;">
-9.0
-</td>
-<td style="text-align:right;">
-6.23
-</td>
-<td style="text-align:right;">
-6.30
-</td>
-<td style="text-align:right;">
-1.039
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Adventure
-</td>
-<td style="text-align:right;">
-2.3
-</td>
-<td style="text-align:right;">
-8.6
-</td>
-<td style="text-align:right;">
-6.51
-</td>
-<td style="text-align:right;">
-6.60
-</td>
-<td style="text-align:right;">
-1.106
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Animation
-</td>
-<td style="text-align:right;">
-4.5
-</td>
-<td style="text-align:right;">
-8.0
-</td>
-<td style="text-align:right;">
-6.65
-</td>
-<td style="text-align:right;">
-6.90
-</td>
-<td style="text-align:right;">
-0.968
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Biography
-</td>
-<td style="text-align:right;">
-4.5
-</td>
-<td style="text-align:right;">
-8.9
-</td>
-<td style="text-align:right;">
-7.11
-</td>
-<td style="text-align:right;">
-7.20
-</td>
-<td style="text-align:right;">
-0.760
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Comedy
-</td>
-<td style="text-align:right;">
-1.9
-</td>
-<td style="text-align:right;">
-8.8
-</td>
-<td style="text-align:right;">
-6.11
-</td>
-<td style="text-align:right;">
-6.20
-</td>
-<td style="text-align:right;">
-1.024
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Crime
-</td>
-<td style="text-align:right;">
-4.8
-</td>
-<td style="text-align:right;">
-9.3
-</td>
-<td style="text-align:right;">
-6.92
-</td>
-<td style="text-align:right;">
-6.90
-</td>
-<td style="text-align:right;">
-0.853
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Documentary
-</td>
-<td style="text-align:right;">
-1.6
-</td>
-<td style="text-align:right;">
-8.5
-</td>
-<td style="text-align:right;">
-6.66
-</td>
-<td style="text-align:right;">
-7.40
-</td>
-<td style="text-align:right;">
-1.767
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Drama
-</td>
-<td style="text-align:right;">
-2.1
-</td>
-<td style="text-align:right;">
-8.8
-</td>
-<td style="text-align:right;">
-6.74
-</td>
-<td style="text-align:right;">
-6.80
-</td>
-<td style="text-align:right;">
-0.915
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:right;">
-5.7
-</td>
-<td style="text-align:right;">
-7.9
-</td>
-<td style="text-align:right;">
-6.50
-</td>
-<td style="text-align:right;">
-5.90
-</td>
-<td style="text-align:right;">
-1.217
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Fantasy
-</td>
-<td style="text-align:right;">
-4.3
-</td>
-<td style="text-align:right;">
-7.9
-</td>
-<td style="text-align:right;">
-6.08
-</td>
-<td style="text-align:right;">
-6.20
-</td>
-<td style="text-align:right;">
-0.953
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Horror
-</td>
-<td style="text-align:right;">
-3.6
-</td>
-<td style="text-align:right;">
-8.5
-</td>
-<td style="text-align:right;">
-5.79
-</td>
-<td style="text-align:right;">
-5.85
-</td>
-<td style="text-align:right;">
-0.987
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Musical
-</td>
-<td style="text-align:right;">
-6.3
-</td>
-<td style="text-align:right;">
-7.2
-</td>
-<td style="text-align:right;">
-6.75
-</td>
-<td style="text-align:right;">
-6.75
-</td>
-<td style="text-align:right;">
-0.636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Mystery
-</td>
-<td style="text-align:right;">
-4.6
-</td>
-<td style="text-align:right;">
-8.5
-</td>
-<td style="text-align:right;">
-6.84
-</td>
-<td style="text-align:right;">
-6.70
-</td>
-<td style="text-align:right;">
-0.910
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Romance
-</td>
-<td style="text-align:right;">
-6.2
-</td>
-<td style="text-align:right;">
-7.1
-</td>
-<td style="text-align:right;">
-6.65
-</td>
-<td style="text-align:right;">
-6.65
-</td>
-<td style="text-align:right;">
-0.636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sci-Fi
-</td>
-<td style="text-align:right;">
-5.0
-</td>
-<td style="text-align:right;">
-8.2
-</td>
-<td style="text-align:right;">
-6.66
-</td>
-<td style="text-align:right;">
-6.40
-</td>
-<td style="text-align:right;">
-1.094
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thriller
-</td>
-<td style="text-align:right;">
-4.8
-</td>
-<td style="text-align:right;">
-4.8
-</td>
-<td style="text-align:right;">
-4.80
-</td>
-<td style="text-align:right;">
-4.80
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Western
-</td>
-<td style="text-align:right;">
-4.1
-</td>
-<td style="text-align:right;">
-7.3
-</td>
-<td style="text-align:right;">
-5.70
-</td>
-<td style="text-align:right;">
-5.70
-</td>
-<td style="text-align:right;">
-2.263
-</td>
-</tr>
-</tbody>
-</table>
-<p>Except for showing them in table, we could also show them in a density plot.</p>
+  gt()</code></pre>
+<p><style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#dpzzznohbn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dpzzznohbn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dpzzznohbn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dpzzznohbn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dpzzznohbn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dpzzznohbn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dpzzznohbn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dpzzznohbn .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dpzzznohbn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dpzzznohbn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dpzzznohbn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dpzzznohbn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dpzzznohbn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#dpzzznohbn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpzzznohbn .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpzzznohbn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dpzzznohbn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#dpzzznohbn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpzzznohbn .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#dpzzznohbn .gt_left {
+  text-align: left;
+}
+
+#dpzzznohbn .gt_center {
+  text-align: center;
+}
+
+#dpzzznohbn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dpzzznohbn .gt_font_normal {
+  font-weight: normal;
+}
+
+#dpzzznohbn .gt_font_bold {
+  font-weight: bold;
+}
+
+#dpzzznohbn .gt_font_italic {
+  font-style: italic;
+}
+
+#dpzzznohbn .gt_super {
+  font-size: 65%;
+}
+
+#dpzzznohbn .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="dpzzznohbn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">genre</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Minimum_Rating</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Max_Rating</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Mean_Rating</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Median_Rating</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">st_dev</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">Action</td>
+      <td class="gt_row gt_right">2.1</td>
+      <td class="gt_row gt_right">9.0</td>
+      <td class="gt_row gt_right">6.23</td>
+      <td class="gt_row gt_right">6.30</td>
+      <td class="gt_row gt_right">1.039</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Adventure</td>
+      <td class="gt_row gt_right">2.3</td>
+      <td class="gt_row gt_right">8.6</td>
+      <td class="gt_row gt_right">6.51</td>
+      <td class="gt_row gt_right">6.60</td>
+      <td class="gt_row gt_right">1.106</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Animation</td>
+      <td class="gt_row gt_right">4.5</td>
+      <td class="gt_row gt_right">8.0</td>
+      <td class="gt_row gt_right">6.65</td>
+      <td class="gt_row gt_right">6.90</td>
+      <td class="gt_row gt_right">0.968</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Biography</td>
+      <td class="gt_row gt_right">4.5</td>
+      <td class="gt_row gt_right">8.9</td>
+      <td class="gt_row gt_right">7.11</td>
+      <td class="gt_row gt_right">7.20</td>
+      <td class="gt_row gt_right">0.760</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Comedy</td>
+      <td class="gt_row gt_right">1.9</td>
+      <td class="gt_row gt_right">8.8</td>
+      <td class="gt_row gt_right">6.11</td>
+      <td class="gt_row gt_right">6.20</td>
+      <td class="gt_row gt_right">1.024</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Crime</td>
+      <td class="gt_row gt_right">4.8</td>
+      <td class="gt_row gt_right">9.3</td>
+      <td class="gt_row gt_right">6.92</td>
+      <td class="gt_row gt_right">6.90</td>
+      <td class="gt_row gt_right">0.853</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Documentary</td>
+      <td class="gt_row gt_right">1.6</td>
+      <td class="gt_row gt_right">8.5</td>
+      <td class="gt_row gt_right">6.66</td>
+      <td class="gt_row gt_right">7.40</td>
+      <td class="gt_row gt_right">1.767</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Drama</td>
+      <td class="gt_row gt_right">2.1</td>
+      <td class="gt_row gt_right">8.8</td>
+      <td class="gt_row gt_right">6.74</td>
+      <td class="gt_row gt_right">6.80</td>
+      <td class="gt_row gt_right">0.915</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Family</td>
+      <td class="gt_row gt_right">5.7</td>
+      <td class="gt_row gt_right">7.9</td>
+      <td class="gt_row gt_right">6.50</td>
+      <td class="gt_row gt_right">5.90</td>
+      <td class="gt_row gt_right">1.217</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Fantasy</td>
+      <td class="gt_row gt_right">4.3</td>
+      <td class="gt_row gt_right">7.9</td>
+      <td class="gt_row gt_right">6.08</td>
+      <td class="gt_row gt_right">6.20</td>
+      <td class="gt_row gt_right">0.953</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Horror</td>
+      <td class="gt_row gt_right">3.6</td>
+      <td class="gt_row gt_right">8.5</td>
+      <td class="gt_row gt_right">5.79</td>
+      <td class="gt_row gt_right">5.85</td>
+      <td class="gt_row gt_right">0.987</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Musical</td>
+      <td class="gt_row gt_right">6.3</td>
+      <td class="gt_row gt_right">7.2</td>
+      <td class="gt_row gt_right">6.75</td>
+      <td class="gt_row gt_right">6.75</td>
+      <td class="gt_row gt_right">0.636</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Mystery</td>
+      <td class="gt_row gt_right">4.6</td>
+      <td class="gt_row gt_right">8.5</td>
+      <td class="gt_row gt_right">6.84</td>
+      <td class="gt_row gt_right">6.70</td>
+      <td class="gt_row gt_right">0.910</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Romance</td>
+      <td class="gt_row gt_right">6.2</td>
+      <td class="gt_row gt_right">7.1</td>
+      <td class="gt_row gt_right">6.65</td>
+      <td class="gt_row gt_right">6.65</td>
+      <td class="gt_row gt_right">0.636</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Sci-Fi</td>
+      <td class="gt_row gt_right">5.0</td>
+      <td class="gt_row gt_right">8.2</td>
+      <td class="gt_row gt_right">6.66</td>
+      <td class="gt_row gt_right">6.40</td>
+      <td class="gt_row gt_right">1.094</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Thriller</td>
+      <td class="gt_row gt_right">4.8</td>
+      <td class="gt_row gt_right">4.8</td>
+      <td class="gt_row gt_right">4.80</td>
+      <td class="gt_row gt_right">4.80</td>
+      <td class="gt_row gt_right">NA</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Western</td>
+      <td class="gt_row gt_right">4.1</td>
+      <td class="gt_row gt_right">7.3</td>
+      <td class="gt_row gt_right">5.70</td>
+      <td class="gt_row gt_right">5.70</td>
+      <td class="gt_row gt_right">2.263</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+Except for showing them in table, we could also show them in a density plot.</p>
 <pre class="r"><code># present data in density plot
 ggplot(movies, aes(x = rating, group = genre)) +
   geom_density(alpha = 0.4, show.legend = F, fill = &#39;lightblue&#39;) +
@@ -922,205 +1111,441 @@ ggplot(movies, aes(x = rating, group = genre)) +
   arrange(desc(total)) %&gt;%
   head(10)
 
-top_directors %&gt;%
-  kbl(col.names = c(&quot;Director&quot;, &quot;Total Revenue (mm)&quot;, &quot;Mean Revenue (mm)&quot;, 
-                    &quot;Median Revenue (mm)&quot;, &quot;SD of Revenue (mm)&quot;), digits = 2) %&gt;%
-  kable_material(c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
-  kable_styling(fixed_thead = T)</code></pre>
-<table class=" lightable-material lightable-striped lightable-hover table" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;'>
-<thead>
-<tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Director
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Total Revenue (mm)
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Mean Revenue (mm)
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Median Revenue (mm)
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-SD of Revenue (mm)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Steven Spielberg
-</td>
-<td style="text-align:right;">
-4014
-</td>
-<td style="text-align:right;">
-174.5
-</td>
-<td style="text-align:right;">
-164.4
-</td>
-<td style="text-align:right;">
-101.4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Michael Bay
-</td>
-<td style="text-align:right;">
-2195
-</td>
-<td style="text-align:right;">
-182.9
-</td>
-<td style="text-align:right;">
-168.5
-</td>
-<td style="text-align:right;">
-125.8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-James Cameron
-</td>
-<td style="text-align:right;">
-1910
-</td>
-<td style="text-align:right;">
-318.3
-</td>
-<td style="text-align:right;">
-175.6
-</td>
-<td style="text-align:right;">
-309.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Christopher Nolan
-</td>
-<td style="text-align:right;">
-1813
-</td>
-<td style="text-align:right;">
-226.7
-</td>
-<td style="text-align:right;">
-196.7
-</td>
-<td style="text-align:right;">
-187.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-George Lucas
-</td>
-<td style="text-align:right;">
-1741
-</td>
-<td style="text-align:right;">
-348.3
-</td>
-<td style="text-align:right;">
-380.3
-</td>
-<td style="text-align:right;">
-146.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Robert Zemeckis
-</td>
-<td style="text-align:right;">
-1619
-</td>
-<td style="text-align:right;">
-124.6
-</td>
-<td style="text-align:right;">
-100.8
-</td>
-<td style="text-align:right;">
-91.3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Tim Burton
-</td>
-<td style="text-align:right;">
-1557
-</td>
-<td style="text-align:right;">
-111.2
-</td>
-<td style="text-align:right;">
-69.8
-</td>
-<td style="text-align:right;">
-99.3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sam Raimi
-</td>
-<td style="text-align:right;">
-1443
-</td>
-<td style="text-align:right;">
-180.4
-</td>
-<td style="text-align:right;">
-138.5
-</td>
-<td style="text-align:right;">
-174.7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Clint Eastwood
-</td>
-<td style="text-align:right;">
-1378
-</td>
-<td style="text-align:right;">
-72.5
-</td>
-<td style="text-align:right;">
-46.7
-</td>
-<td style="text-align:right;">
-75.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Francis Lawrence
-</td>
-<td style="text-align:right;">
-1358
-</td>
-<td style="text-align:right;">
-271.7
-</td>
-<td style="text-align:right;">
-281.7
-</td>
-<td style="text-align:right;">
-135.4
-</td>
-</tr>
-</tbody>
-</table>
-<p>Now, we have top10 directors’data. In project2 <a href="">IMDB-2</a>, we will do move analysis.</p>
+top_directors %&gt;% 
+  gt() %&gt;% 
+  tab_header(title = md(&quot;Top 10 Directors - Movies Financial Data (Million)&quot;)) %&gt;% 
+  fmt_currency(columns = vars(total, mean, median, st_dev),
+               currency = &quot;USD&quot;)</code></pre>
+<p><style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#nvirtoluyz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nvirtoluyz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nvirtoluyz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nvirtoluyz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nvirtoluyz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nvirtoluyz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nvirtoluyz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nvirtoluyz .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nvirtoluyz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nvirtoluyz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nvirtoluyz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nvirtoluyz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nvirtoluyz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#nvirtoluyz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nvirtoluyz .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nvirtoluyz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nvirtoluyz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nvirtoluyz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nvirtoluyz .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nvirtoluyz .gt_left {
+  text-align: left;
+}
+
+#nvirtoluyz .gt_center {
+  text-align: center;
+}
+
+#nvirtoluyz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nvirtoluyz .gt_font_normal {
+  font-weight: normal;
+}
+
+#nvirtoluyz .gt_font_bold {
+  font-weight: bold;
+}
+
+#nvirtoluyz .gt_font_italic {
+  font-style: italic;
+}
+
+#nvirtoluyz .gt_super {
+  font-size: 65%;
+}
+
+#nvirtoluyz .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="nvirtoluyz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="5" class="gt_heading gt_title gt_font_normal" style>Top 10 Directors - Movies Financial Data (Million)</th>
+    </tr>
+    <tr>
+      <th colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">director</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">total</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mean</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">median</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">st_dev</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">Steven Spielberg</td>
+      <td class="gt_row gt_right">$4,014.06</td>
+      <td class="gt_row gt_right">$174.52</td>
+      <td class="gt_row gt_right">$164.44</td>
+      <td class="gt_row gt_right">$101.42</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Michael Bay</td>
+      <td class="gt_row gt_right">$2,195.44</td>
+      <td class="gt_row gt_right">$182.95</td>
+      <td class="gt_row gt_right">$168.47</td>
+      <td class="gt_row gt_right">$125.79</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">James Cameron</td>
+      <td class="gt_row gt_right">$1,909.73</td>
+      <td class="gt_row gt_right">$318.29</td>
+      <td class="gt_row gt_right">$175.56</td>
+      <td class="gt_row gt_right">$309.17</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Christopher Nolan</td>
+      <td class="gt_row gt_right">$1,813.23</td>
+      <td class="gt_row gt_right">$226.65</td>
+      <td class="gt_row gt_right">$196.67</td>
+      <td class="gt_row gt_right">$187.22</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">George Lucas</td>
+      <td class="gt_row gt_right">$1,741.42</td>
+      <td class="gt_row gt_right">$348.28</td>
+      <td class="gt_row gt_right">$380.26</td>
+      <td class="gt_row gt_right">$146.19</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Robert Zemeckis</td>
+      <td class="gt_row gt_right">$1,619.31</td>
+      <td class="gt_row gt_right">$124.56</td>
+      <td class="gt_row gt_right">$100.85</td>
+      <td class="gt_row gt_right">$91.30</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Tim Burton</td>
+      <td class="gt_row gt_right">$1,557.08</td>
+      <td class="gt_row gt_right">$111.22</td>
+      <td class="gt_row gt_right">$69.79</td>
+      <td class="gt_row gt_right">$99.30</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Sam Raimi</td>
+      <td class="gt_row gt_right">$1,443.17</td>
+      <td class="gt_row gt_right">$180.40</td>
+      <td class="gt_row gt_right">$138.48</td>
+      <td class="gt_row gt_right">$174.71</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Clint Eastwood</td>
+      <td class="gt_row gt_right">$1,378.32</td>
+      <td class="gt_row gt_right">$72.54</td>
+      <td class="gt_row gt_right">$46.70</td>
+      <td class="gt_row gt_right">$75.49</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Francis Lawrence</td>
+      <td class="gt_row gt_right">$1,358.50</td>
+      <td class="gt_row gt_right">$271.70</td>
+      <td class="gt_row gt_right">$281.67</td>
+      <td class="gt_row gt_right">$135.44</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+Now, we have top10 directors’data. In project2 <a href="">IMDB-2</a>, we will do move analysis.</p>
 </div>
 </div>
 <div id="graphical-descriptive-analysis-based-on-ggplot" class="section level1">
@@ -1189,8 +1614,8 @@ movies %&gt;%
 <p>Next project, we are going to explore more on the director dataset to find out whether the mean IMDB rating for directors are same or not.</p>
 </div>
 </div>
-<div id="project-information" class="section level1">
-<h1>Project Information</h1>
+<div id="details-and-resources" class="section level1">
+<h1>Details and Resources</h1>
 <p>Adapted from: <em>Assignment from <a href="https://mam2021.netlify.app/">Applied Statistics with R</a>, London Business School</em></p>
 <p>Course Instructor: <em><a href="https://www.london.edu/faculty-and-research/faculty-profiles/k/kostis-christodoulou">Kostis Christodoulou</a></em></p>
 <p>Original assignment collaborated with: <em>Ken Dobson, Othman Bensouda, Carlota Castro Perez, Fabian Sinn, Lucksika Chaikul</em></p>

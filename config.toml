@@ -82,7 +82,7 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, I am Acacia."
-    subtitle = "A CURIOUS, IMPACT-LOVING, SELF-REFLECTIVE GIRL\nA FUTURE DATA-DRIVEN CHANGEMAKER\nA STUDENT STUDYING IN LONDON BUSINESS SCHOOL"
+    subtitle = "A STUDENT STUDYING IN LONDON BUSINESS SCHOOL</br>A CURIOUS, IMPACT-LOVING, SELF-REFLECTIVE GIRL</br>A FUTURE DATA-DRIVEN CHANGEMAKER"
     buttonText = "Get to Know Me"
 
 
@@ -98,10 +98,10 @@ disqusShortname = ""
       url = "projects/project1"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic02.jpg"
-      url = "blogs/tempus"
+      title = "Explore IMDB Dataset - 2"
+      subtitle = "IMDB ratings: Differences between directors"
+      image = "projects/pic02.jpg"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
       title = "Magna"
